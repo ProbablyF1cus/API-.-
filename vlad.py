@@ -178,7 +178,8 @@ class Example(QMainWindow):
         coord2 = float(self.coord2.text()) + self.sizey
         spn1 = float(self.spn.text())
         spn2 = float(self.spn_2.text())
-        
+
+
         coord1 = coord1
         coord2 = coord2
         ll_spn = f'll={coord1},{coord2}&spn={spn1},{spn2}'
