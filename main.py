@@ -221,7 +221,7 @@ class Example(QMainWindow):
     def closeEvent(self, event):
         os.remove(self.map_file)
 
-
+#kk
 if __name__ == '__main__':
     app = QApplication(sys.argv)
     ex = Example()
