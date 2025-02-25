@@ -172,11 +172,7 @@ class Example(QMainWindow):
     def getImage(self):
         server_address = 'https://static-maps.yandex.ru/v1?'
         api_key = 'f3a0fe3a-b07e-4840-a1da-06f18b2ddf13'
-        coord1 = float(self.coord1.text())
-        coord2 = float(self.coord2.text())
-        spn1 = float(self.spn.text())
-        spn2 = float(self.spn_2.text())
-        ll_spn = f'll={coord1},{coord2}&spn={spn1},{spn2}'
+        ll_spn = f'll={self.c1},{self.c2}&spn={self.spn1},{self.spn2}'
         # Готовим запрос.
 
         map_request = f"{server_address}{ll_spn}&z={self.z}&apikey={api_key}"
@@ -196,19 +192,31 @@ class Example(QMainWindow):
 
         self.search_button.clicked.connect(self.search)
 
+    def keyPressEvent(self, event2):
+        if event2.key() == 16777238 and self.z < 21:
+            self.spn1 += 1
+            self.spn2 += 1
+            self.getImage()
+            self.pixmap = QPixmap(self.map_file)
+            self.map.setPixmap(self.pixmap)
+        if event2.key() == 16777239 and self.z > 0:
+            self.spn1 -= 1
+            self.spn2 -= 1
+            self.getImage()
+            self.pixmap = QPixmap(self.map_file)
+            self.map.setPixmap(self.pixmap)
+
     def search(self):
         try:
+            self.c1 = float(self.coord1.text())
+            self.c2 = float(self.coord2.text())
+            self.spn1 = float(self.spn.text())
+            self.spn2 = float(self.spn_2.text())
             self.getImage()
             self.pixmap = QPixmap(self.map_file)
             self.map.setPixmap(self.pixmap)
         except Exception:
             print("Неверный формат данных/данной точки не существует")
-
-    def keyPressEvent(self, event2):
-        if event2.key() == 16777238 and self.z < 21:
-            self.z += 1
-        elif event2.key() == 16777239 and self.z > 0:
-            self.z -= 1
 
     def closeEvent(self, event):
         os.remove(self.map_file)
