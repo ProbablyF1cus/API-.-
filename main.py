@@ -36,32 +36,6 @@ f = """<?xml version="1.0" encoding="UTF-8"?>
      <string/>
     </property>
    </widget>
-   <widget class="QLineEdit" name="coord1">
-    <property name="geometry">
-     <rect>
-      <x>590</x>
-      <y>10</y>
-      <width>131</width>
-      <height>20</height>
-     </rect>
-    </property>
-    <property name="placeholderText">
-     <string>Долгота</string>
-    </property>
-   </widget>
-   <widget class="QLineEdit" name="coord2">
-    <property name="geometry">
-     <rect>
-      <x>590</x>
-      <y>40</y>
-      <width>131</width>
-      <height>20</height>
-     </rect>
-    </property>
-    <property name="placeholderText">
-     <string>Широта</string>
-    </property>
-   </widget>
    <widget class="QPushButton" name="search_button">
     <property name="geometry">
      <rect>
@@ -101,22 +75,6 @@ f = """<?xml version="1.0" encoding="UTF-8"?>
      <string>Широта</string>
     </property>
    </widget>
-   <widget class="QLineEdit" name="spn">
-    <property name="geometry">
-     <rect>
-      <x>590</x>
-      <y>70</y>
-      <width>131</width>
-      <height>20</height>
-     </rect>
-    </property>
-    <property name="text">
-     <string/>
-    </property>
-    <property name="placeholderText">
-     <string>Долгота</string>
-    </property>
-   </widget>
    <widget class="QLabel" name="label">
     <property name="geometry">
      <rect>
@@ -130,17 +88,92 @@ f = """<?xml version="1.0" encoding="UTF-8"?>
      <string>Масштаб</string>
     </property>
    </widget>
-   <widget class="QLineEdit" name="spn_2">
+   <widget class="QDoubleSpinBox" name="coord1">
+    <property name="geometry">
+     <rect>
+      <x>590</x>
+      <y>10</y>
+      <width>131</width>
+      <height>22</height>
+     </rect>
+    </property>
+    <property name="decimals">
+     <number>6</number>
+    </property>
+    <property name="minimum">
+     <double>-180.000000000000000</double>
+    </property>
+    <property name="maximum">
+     <double>180.000000000000000</double>
+    </property>
+    <property name="singleStep">
+     <double>0.500000000000000</double>
+    </property>
+   </widget>
+   <widget class="QDoubleSpinBox" name="coord2">
+    <property name="geometry">
+     <rect>
+      <x>590</x>
+      <y>40</y>
+      <width>131</width>
+      <height>22</height>
+     </rect>
+    </property>
+    <property name="decimals">
+     <number>6</number>
+    </property>
+    <property name="minimum">
+     <double>-180.000000000000000</double>
+    </property>
+    <property name="maximum">
+     <double>180.000000000000000</double>
+    </property>
+    <property name="singleStep">
+     <double>0.500000000000000</double>
+    </property>
+   </widget>
+   <widget class="QDoubleSpinBox" name="spn">
+    <property name="geometry">
+     <rect>
+      <x>590</x>
+      <y>70</y>
+      <width>131</width>
+      <height>22</height>
+     </rect>
+    </property>
+    <property name="decimals">
+     <number>6</number>
+    </property>
+    <property name="minimum">
+     <double>-180.000000000000000</double>
+    </property>
+    <property name="maximum">
+     <double>180.000000000000000</double>
+    </property>
+    <property name="singleStep">
+     <double>0.500000000000000</double>
+    </property>
+   </widget>
+   <widget class="QDoubleSpinBox" name="spn_2">
     <property name="geometry">
      <rect>
       <x>590</x>
       <y>100</y>
       <width>131</width>
-      <height>20</height>
+      <height>22</height>
      </rect>
     </property>
-    <property name="placeholderText">
-     <string>Широта</string>
+    <property name="decimals">
+     <number>6</number>
+    </property>
+    <property name="minimum">
+     <double>-180.000000000000000</double>
+    </property>
+    <property name="maximum">
+     <double>180.000000000000000</double>
+    </property>
+    <property name="singleStep">
+     <double>0.500000000000000</double>
     </property>
    </widget>
   </widget>
@@ -218,10 +251,10 @@ class Example(QMainWindow):
 
     def search(self):
         try:
-            self.c1 = float(self.coord1.text())
-            self.c2 = float(self.coord2.text())
-            self.s1 = float(self.spn.text())
-            self.s2 = float(self.spn_2.text())
+            self.c1 = self.coord1.value()
+            self.c2 = self.coord2.value()
+            self.s1 = self.spn.value()
+            self.s2 = self.spn_2.value()
             self.getImage()
             self.display()
         except Exception as e:
