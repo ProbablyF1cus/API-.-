@@ -167,6 +167,7 @@ class Example(QMainWindow):
         super().__init__()
         uic.loadUi(io.StringIO(f), self)
         self.initUI()
+        self.z = 15
 
     def getImage(self):
         server_address = 'https://static-maps.yandex.ru/v1?'
@@ -178,7 +179,8 @@ class Example(QMainWindow):
         ll_spn = f'll={coord1},{coord2}&spn={spn1},{spn2}'
         # Готовим запрос.
 
-        map_request = f"{server_address}{ll_spn}&apikey={api_key}"
+        map_request = f"{server_address}{ll_spn}&z={self.z}&apikey={api_key}"
+        print(map_request)
         response = requests.get(map_request)
 
         if not response:
@@ -201,6 +203,12 @@ class Example(QMainWindow):
             self.map.setPixmap(self.pixmap)
         except Exception:
             print("Неверный формат данных/данной точки не существует")
+
+    def keyPressEvent(self, event2):
+        if event2.key() == 16777238 and self.z < 21:
+            self.z += 1
+        elif event2.key() == 16777239 and self.z > 0:
+            self.z -= 1
 
     def closeEvent(self, event):
         os.remove(self.map_file)
