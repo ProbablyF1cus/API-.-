@@ -144,7 +144,7 @@ f = """<?xml version="1.0" encoding="UTF-8"?>
     </property>
    </widget>
   </widget>
-  <widget class="QMenuBar" name="menubar">
+  <widget class="QMenuBar" name="settings">
    <property name="geometry">
     <rect>
      <x>0</x>
@@ -153,8 +153,32 @@ f = """<?xml version="1.0" encoding="UTF-8"?>
      <height>21</height>
     </rect>
    </property>
+   <widget class="QMenu" name="menu">
+    <property name="title">
+     <string>Настройки</string>
+    </property>
+    <widget class="QMenu" name="menu_2">
+     <property name="title">
+      <string>Тема</string>
+     </property>
+     <addaction name="light"/>
+     <addaction name="dark"/>
+    </widget>
+    <addaction name="menu_2"/>
+   </widget>
+   <addaction name="menu"/>
   </widget>
   <widget class="QStatusBar" name="statusbar"/>
+  <action name="light">
+   <property name="text">
+    <string>Светлая</string>
+   </property>
+  </action>
+  <action name="dark">
+   <property name="text">
+    <string>Тёмная</string>
+   </property>
+  </action>
  </widget>
  <resources/>
  <connections/>
@@ -167,18 +191,14 @@ class Example(QMainWindow):
         super().__init__()
         uic.loadUi(io.StringIO(f), self)
         self.initUI()
+        self.theme = 'light'
 
     def getImage(self):
         server_address = 'https://static-maps.yandex.ru/v1?'
         api_key = 'f3a0fe3a-b07e-4840-a1da-06f18b2ddf13'
-        coord1 = float(self.coord1.text())
-        coord2 = float(self.coord2.text())
-        spn1 = float(self.spn.text())
-        spn2 = float(self.spn_2.text())
-        ll_spn = f'll={coord1},{coord2}&spn={spn1},{spn2}'
-        # Готовим запрос.
+        ll_spn = f'll={self.c1},{self.c2}&spn={self.s1},{self.s2}'
 
-        map_request = f"{server_address}{ll_spn}&apikey={api_key}"
+        map_request = f"{server_address}{ll_spn}&theme={self.theme}&apikey={api_key}"
         response = requests.get(map_request)
 
         if not response:
@@ -193,14 +213,33 @@ class Example(QMainWindow):
         self.setWindowTitle('Yandex Maps')
 
         self.search_button.clicked.connect(self.search)
+        self.light.triggered.connect(self.light_theme)
+        self.dark.triggered.connect(self.dark_theme)
 
     def search(self):
         try:
+            self.c1 = float(self.coord1.text())
+            self.c2 = float(self.coord2.text())
+            self.s1 = float(self.spn.text())
+            self.s2 = float(self.spn_2.text())
             self.getImage()
-            self.pixmap = QPixmap(self.map_file)
-            self.map.setPixmap(self.pixmap)
-        except Exception:
-            print("Неверный формат данных/данной точки не существует")
+            self.display()
+        except Exception as e:
+            print(e.__class__.__name__)
+
+    def light_theme(self):
+        self.theme = 'light'
+        self.getImage()
+        self.display()
+
+    def dark_theme(self):
+        self.theme = 'dark'
+        self.getImage()
+        self.display()
+
+    def display(self):
+        self.pixmap = QPixmap(self.map_file)
+        self.map.setPixmap(self.pixmap)
 
     def closeEvent(self, event):
         os.remove(self.map_file)
